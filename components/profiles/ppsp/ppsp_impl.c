@@ -1641,7 +1641,7 @@ ppsp_impl_prc_serv_msgs_pack(uint8* msgs)
     {
         logs_war("mesg numb:rcvd:#X%d, xpct:#X%d", msgn, __ppsp_impl_msgs_numb);
         logs_war("mesg numb:alln:#X%d, seqn:#X%d, xpct:#X%d", alln, seqn, __ppsp_impl_upda_seqn);
-        logs_war("!! MSGS LOSS, ALLS DROP !! \r\n",);
+        logs_war("!! MSGS LOSS, ALLS DROP !! \r\n");
         // THIS FRAME AND ALL FOLLOWS WILL BE DROP
         // AND RSPN LAST SUCC UPDA SIZE
         ppsp_impl_ack_serv_msgs_pack(

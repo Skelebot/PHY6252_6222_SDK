@@ -442,6 +442,7 @@ void bleuart_Init( uint8 task_id )
     GATTServApp_AddService( GATT_ALL_SERVICES );    // GATT attributes
     DevInfo_AddService();                           // Device Information Service
     bleuart_AddService(on_bleuartServiceEvt);
+    ota_app_AddService();
     //update_mtu_llPHY_DLE();  // update mtu=247, llPHY 2M
     at_Init(); // initial uart for AT cmd first.
 

@@ -118,7 +118,7 @@ uint8_t cmdlen = 0;
 AT_ctx_t mAT_Ctx;
 AT_ctx_t mAT_Ctx_def =
 {
-    .connectable     = false, // connectable or not
+    .connectable     = true, // connectable or not
     .led_mod         = true,  // on
     .ble_role        = false, // slave mode
     .mod_name        = "PHY-01",
@@ -408,20 +408,20 @@ uint16_t at_rx(uint32_t argc, uint8_t* argv[])
 
         AT_LOG("\nPIN :%s",mAT_Ctx.mod_pin);
         #else
-        AT_LOG("\nName     £º%s",mAT_Ctx.mod_name);
+        AT_LOG("\nName     ï¿½ï¿½%s",mAT_Ctx.mod_name);
 
         if(mAT_Ctx.ble_role)
-            AT_LOG("\nRole     £ºMaster");
+            AT_LOG("\nRole     ï¿½ï¿½Master");
         else
-            AT_LOG("\nRole     £ºSlave");
+            AT_LOG("\nRole     ï¿½ï¿½Slave");
 
         AT_LOG("\nBaudrate : %d",mAT_Ctx.baudrate);
-        AT_LOG("\nBLE addr £º%02x",mAT_Ctx.mac_addr[0]);
+        AT_LOG("\nBLE addr ï¿½ï¿½%02x",mAT_Ctx.mac_addr[0]);
 
         for(i = 1; i < 6; i++ )
             AT_LOG(":%02x",mAT_Ctx.mac_addr[i]);
 
-        AT_LOG("\nPIN      £º%s",mAT_Ctx.mod_pin);
+        AT_LOG("\nPIN      ï¿½ï¿½%s",mAT_Ctx.mod_pin);
         #endif
         AT_LOG("\nOK\n");
     }

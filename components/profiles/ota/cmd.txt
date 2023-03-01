@@ -1,0 +1,12 @@
+start:   01 01 00 (cmd, sector_num < 32, burst_size)
+> erase 2nd BOOTINFO_ADDR 0x1100_3000 4k bytes
+< OTA_RSP_START_OTA 0x81
+
+         cmd id  flash_addr   run_addr     size         checksum
+correct: 02  00  00 00 00 00  38 18 FF 1F  b5 28 00 00  19 d7
+error06: 02  00  00 00 00 00  00 00 02 11  61 77 00 00  84 8a
+
+> if run_addr IN (0x1100_0000; 0x1107_ffff) flash_addr = run_addr
+
+correct: flash_addr = 0
+error06: flash_addr = 1102_0000

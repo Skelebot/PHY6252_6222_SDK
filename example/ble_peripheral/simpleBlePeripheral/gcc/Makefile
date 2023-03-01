@@ -1,8 +1,7 @@
-BIN = ./output/sbp.bin
-IHEX = ./output/sbp.ihex
-ELF = ./output/sbp.elf
-ASM = ./output/sbp.asm
-
+BIN = output/sbp.bin
+IHEX = output/sbp.hex
+ELF = output/sbp.elf
+ASM = output/sbp.asm
 
 ROOT := ../../../..
 PROJ_ROOT := ..
@@ -34,14 +33,12 @@ SRC_RAW += OSAL_SimpleBLEPeripheral.c
 SRC_RAW += simpleBLEPeripheral.c
 SRC_RAW += SimpleBLEPeripheral_Main.c
 
-
 STARTUP_RAW = phy6222_start.s
 
 SRC_RAW += $(CSRCS)
 
 INC += -I$(PROJ_ROOT)/source
-
-
+INC += -Ioutput
 
 CFLAGS += -O0
 CFLAGS += -g3
@@ -60,7 +57,7 @@ CFLAGS += -Wall
 #LFLAGS += -mthumb
 #LFLAGS += -mfpu=fpv4-sp-d16
 LFLAGS += -Wl,--gc-sections
-LFLAGS += -Wl,-Map=build.map
+LFLAGS += -Wl,-Map=output/build.map
 LFLAGS += $(ROOT)/misc/bb_rom_sym_m0.gdbsym
 LFLAGS += $(LIBS_PATH)
 LFLAGS += $(LIBS)
@@ -71,31 +68,34 @@ OBJ :=  $(notdir $(OBJ))
 STARTUP_OBJ = $(STARTUP_RAW:%.s=%.o)
 STARTUP_OBJ :=  $(notdir $(STARTUP_OBJ))
 
+OBJ_OUT := $(patsubst %,output/%,$(OBJ))
+STARTUP_OBJ_OUT := $(patsubst %,output/%,$(STARTUP_OBJ))
+
+all: pre-build $(OBJ) $(STARTUP_OBJ) build
+
+build:
+	arm-none-eabi-gcc -o $(ELF) $(CFLAGS) $(OBJ_OUT) $(STARTUP_OBJ_OUT) $(LFLAGS) -T$(FLASH_LD) 
+#arm-none-eabi-ld -o $(ELF) $(LFLAGS) $(OBJ) $(STARTUP_OBJ) -T$(FLASH_LD) 
+	arm-none-eabi-objcopy -O binary -S $(ELF) $(BIN)
+	arm-none-eabi-objcopy -O ihex $(ELF) $(IHEX)
+#arm-none-eabi-objdump -s -S $(ELF) > $(ASM)
 
 
-all:$(OBJ) $(STARTUP_OBJ)
+
+pre-build:
 	@echo $(STARTUP_OBJ)
 	@echo $(OBJ)
 	@echo $(BIN)
-
 	mkdir -p output
 
-	arm-none-eabi-gcc -o $(ELF) $(CFLAGS) $(OBJ) $(STARTUP_OBJ) $(LFLAGS) -T$(FLASH_LD) 
-	#arm-none-eabi-ld -o $(ELF) $(LFLAGS) $(OBJ) $(STARTUP_OBJ) -T$(FLASH_LD) 
-	arm-none-eabi-objcopy -O binary -S $(ELF) $(BIN)
-	arm-none-eabi-objcopy -O ihex $(ELF) $(IHEX)
-	arm-none-eabi-objdump -s -S $(ELF) > $(ASM)
-	
 %.o:%.s
-	arm-none-eabi-gcc -c $(CFLAGS) $< -o $@
+	arm-none-eabi-gcc -c $(CFLAGS) $< -o output/$@
 	@echo
 
 %.o:%.c
-	arm-none-eabi-gcc -c $(CFLAGS) $(DEF) $(INC) $< -o $@
+	arm-none-eabi-gcc -c $(CFLAGS) $(DEF) $(INC) $< -o output/$@
 	@echo
 
 .PHONY: clean
 clean :
-	@-rm  *.elf *.hex *.bin
-	-rm $(OBJ)
-	-rm $(STARTUP_OBJ)
+	rm -rf output

@@ -128,7 +128,7 @@ static uint8 advertData[] =
     'P',
     'P',
     'l',
-    'u',
+    'x',
     's',
     'O',
     'T',
